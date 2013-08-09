@@ -1,0 +1,9 @@
+Package: me.cykey.uninstallappsize
+Name: Uninstall Application Size
+Depends: mobilesubstrate, firmware (>= 6.0) 
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Shows an application's size when prompting to uninstall
+Maintainer: Cykey (David Murray)
+Author: Cykey (David Murray)
+Section: Tweaks
