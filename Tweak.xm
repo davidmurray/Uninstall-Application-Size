@@ -24,9 +24,27 @@ static size_t UASGetApplicationSize(SBIcon *icon)
 	return [[data objectForKey:@"StaticDiskUsage"] longLongValue] + [[data objectForKey:@"DynamicDiskUsage"] longLongValue];
 }
 
+// XXX: Maybe there's a better way to do this other than copy the same code three times?
+
 %hook SBUserInstalledApplicationIcon
 
 - (NSString *)uninstallAlertBody
+{
+	NSString *byteCount = [NSByteCountFormatter stringFromByteCount:UASGetApplicationSize(self) countStyle:NSByteCountFormatterCountStyleFile];
+	NSString *replacedBody = [NSString stringWithFormat:@"%@\nApplication Size: %@", %orig, byteCount];
+
+	return replacedBody;
+}
+
+- (NSString *)uninstallAlertBodyForAppWithDocumentUpdatesPending
+{
+	NSString *byteCount = [NSByteCountFormatter stringFromByteCount:UASGetApplicationSize(self) countStyle:NSByteCountFormatterCountStyleFile];
+	NSString *replacedBody = [NSString stringWithFormat:@"%@\nApplication Size: %@", %orig, byteCount];
+
+	return replacedBody;
+}
+
+- (NSString *)uninstallAlertBodyForAppWithDocumentsInCloud
 {
 	NSString *byteCount = [NSByteCountFormatter stringFromByteCount:UASGetApplicationSize(self) countStyle:NSByteCountFormatterCountStyleFile];
 	NSString *replacedBody = [NSString stringWithFormat:@"%@\nApplication Size: %@", %orig, byteCount];
